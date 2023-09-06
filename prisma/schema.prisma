@@ -1,0 +1,30 @@
+// ! npx prisma init kreria ovaj file
+// ! u mongodb napravim jednu kolekciju i objekt i nakon toga
+// ! npx prisma db pull
+// ! to će povući schemu direkt sa baze i stvoriti model za npr. products
+// ! btw. taj proces se zove introspection
+// ! OBRNUTI PROCESS
+// ! dodam novi model ili updejtam postojeći model
+// ! nakon toga
+// ! npx prisma db push
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Product { // promjenio ime nakon pulla iz products u Product
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+  imageUrl    String
+  name        String
+  price       Int
+  createdAt   DateTime @default(now()) // dodano ručno nakon pulla sa mongoDB
+  updatedAt   DateTime @updatedAt // dodano ručno nakon pulla sa mongoDB
+
+  @@map("products") // vezano za kolekciju products
+}
