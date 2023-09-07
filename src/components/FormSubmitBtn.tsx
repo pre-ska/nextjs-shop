@@ -14,7 +14,6 @@ export default function FormSubmitBtn({
   ...props
 }: FormSubmitBtnProps) {
   const { pending } = useFormStatus();
-  console.log(pending);
 
   return (
     <button
