@@ -1,3 +1,4 @@
+import FormSubmitBtn from "@/components/FormSubmitBtn";
 import { prisma } from "@/lib/db/prisma";
 import { redirect } from "next/navigation";
 
@@ -5,10 +6,9 @@ export const metadata = {
   title: "Add product",
 };
 
-// ! ovo server akciju mogu staviti ovdje jer ovo nije client component
+// ! ovu server akciju mogu staviti ovdje jer ovo nije client component
 async function addProduct(formData: FormData) {
   "use server"; // ! server action
-  console.log(formData);
 
   const name = formData.get("name")?.toString();
   const description = formData.get("description")?.toString();
@@ -64,9 +64,7 @@ export default function AddProductPage() {
           className="input-bordered input mb-3 w-full"
         />
 
-        <button type="submit" className="btn-primary btn-block btn">
-          Add product
-        </button>
+        <FormSubmitBtn className="btn-block">Add product</FormSubmitBtn>
       </form>
     </div>
   );
