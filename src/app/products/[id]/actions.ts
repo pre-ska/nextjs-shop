@@ -13,19 +13,28 @@ export async function incrementProductQuantity(productId: string) {
 
   // ako postoji, povećaj mu quantity
   if (articleInCart) {
-    await prisma.cartItem.update({
-      where: { id: articleInCart.id },
+    await prisma.cart.update({
+      where: { id: cart.id },
       data: {
-        quantity: { increment: 1 },
+        items: {
+          update: {
+            where: { id: articleInCart.id },
+            data: { quantity: { increment: 1 } },
+          },
+        },
       },
     });
   } else {
     // ako ne, kreiraj novi item
-    await prisma.cartItem.create({
+    await prisma.cart.update({
+      where: { id: cart.id },
       data: {
-        cartId: cart.id,
-        productId,
-        quantity: 1,
+        items: {
+          create: {
+            productId,
+            quantity: 1,
+          },
+        },
       },
     });
   }
