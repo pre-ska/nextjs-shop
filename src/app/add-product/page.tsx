@@ -8,7 +8,7 @@ export const metadata = {
 
 // ! ovu server akciju mogu staviti ovdje jer ovo nije client component
 async function addProduct(formData: FormData) {
-  "use server"; // ! server action
+  "use server"; // ! server action flag
 
   const name = formData.get("name")?.toString();
   const description = formData.get("description")?.toString();
