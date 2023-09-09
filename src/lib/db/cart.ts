@@ -112,17 +112,34 @@ export async function mergeAnonymousCartIntoUserCart(userId: string) {
       // obrišem postojeće itemse u user cart
       await tx.cartItem.deleteMany({ where: { cartId: userCart.id } });
 
+      // ! ovo je isprva bilo drugačije - cartItem.createMany komentiran dolje
+      // ! vidi app/cart/actions.ts zašto koristim cart model
       // stvorim nove itemse u user cartu (merge postojećih i iz localnog carta)
-      await tx.cartItem.createMany({
-        data: mergedCartItems.map((item) => ({
-          cartId: userCart.id,
-          productId: item.productId,
-          quantity: item.quantity,
-        })),
+      await prisma.cart.update({
+        where: { id: userCart.id },
+        data: {
+          items: {
+            createMany: {
+              data: mergedCartItems.map((item) => ({
+                productId: item.productId,
+                quantity: item.quantity,
+              })),
+            },
+          },
+        },
       });
+
+      // await tx.cartItem.createMany({
+      //   data: mergedCartItems.map((item) => ({
+      //     cartId: userCart.id,
+      //     productId: item.productId,
+      //     quantity: item.quantity,
+      //   })),
+      // });
     } else {
       // ako ne postoji cart od logiranog korisnika, moramo stvorit novi cart
       // sa itemslima iz lokalnog carta
+      // btw. relation - creairam cart i u njemu itemse u jednom requestu
       await tx.cart.create({
         data: {
           userId,

@@ -13,6 +13,8 @@ export async function incrementProductQuantity(productId: string) {
 
   // ako postoji, povećaj mu quantity
   if (articleInCart) {
+    // ! ovo je isprva bilo drugačije
+    // ! vidi app/cart/actions.ts zašto koristim cart model
     await prisma.cart.update({
       where: { id: cart.id },
       data: {
